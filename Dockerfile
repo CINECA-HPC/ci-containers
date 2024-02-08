@@ -30,8 +30,8 @@ RUN apt-get update && \
     # Install Cmake
     wget --no-verbose https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     chmod +x cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
-    ./cmake-${CMAKE_VERSION}-linux-x86_64.sh --skip-license --prefix=/usr/local
-    rm -f ./cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
+    ./cmake-${CMAKE_VERSION}-linux-x86_64.sh --skip-license --prefix=/usr/local && \
+    rm -f ./cmake-${CMAKE_VERSION}-linux-x86_64.sh
 # Remove unneeded stuff
 #apt-get remove wget -y && \
 #apt-get autoremove -y
