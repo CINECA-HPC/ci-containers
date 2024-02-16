@@ -33,6 +33,14 @@ jobs:
       id-token: write
 
     steps:
+      # Check this page if the space freed is not enough
+      # https://github.com/easimon/maximize-build-space/blob/test-report/README.md
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 35000
+          swap-size-mb: 1024
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -40,7 +48,7 @@ jobs:
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
         if: github.event_name != 'pull_request'
-        uses: sigstore/cosign-installer@6e04d228eb30da1757ee4e1dd75a0ec73a653e06 #v3.1.1
+        uses: sigstore/cosign-installer@6e04d228eb30da1757ee4e1dd75a0ec73a653e06 # v3.1.1
         with:
           cosign-release: 'v2.1.1'
 
