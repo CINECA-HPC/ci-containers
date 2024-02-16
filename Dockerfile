@@ -33,8 +33,6 @@ RUN apt-get update && \
     sh ./intel_hpckit.sh -a --action install --silent --eula accept && \
     echo "After HPCKit installation" && \
     rm -f ./intel_hpckit.sh && \
-    # Setup environment variables
-    . /opt/intel/oneapi/setvars.sh && \
     # Install Cmake
     wget --no-verbose https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     chmod +x cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
@@ -42,6 +40,6 @@ RUN apt-get update && \
     rm -f ./cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     # Remove unneeded stuff
     apt-get remove wget -y && \
-    apt-get autoremove -y
-
-CMD . /opt/intel/oneapi/setvars.sh
+    apt-get autoremove -y && \
+    # Setup environment variables
+    . /opt/intel/oneapi/setvars.sh
