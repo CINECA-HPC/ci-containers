@@ -8,6 +8,7 @@ ARG INTEL_HPCKIT_VERSION=2024.0.1.38
 ARG CMAKE_VERSION=3.28.2
 
 WORKDIR /root
+
 RUN apt-get update && \
     apt-get upgrade -y && \
     # Installing what we need:
@@ -42,3 +43,5 @@ RUN apt-get update && \
     # Remove unneeded stuff
     apt-get remove wget -y && \
     apt-get autoremove -y
+
+CMD . /opt/intel/oneapi/setvars.sh
