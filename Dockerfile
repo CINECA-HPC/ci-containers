@@ -41,5 +41,5 @@ RUN apt-get update && \
     # Remove unneeded stuff
     apt-get remove wget -y && \
     apt-get autoremove -y && \
-    # Setup environment variables
-    . /opt/intel/oneapi/setvars.sh
+    # Setup environment variables automatically on startup
+    echo ". /opt/intel/oneapi/setvars.sh" >> ~/.bashrc
