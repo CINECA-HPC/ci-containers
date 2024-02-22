@@ -12,12 +12,13 @@ WORKDIR /root
 RUN apt-get update && \
     apt-get upgrade -y && \
     # Installing what we need:
-    # wget            is to download cmake and Intel's compiler
-    # g++             is for gcc and ld
-    # make            is for cmake's generation
-    # libopenblas-dev is for BLAS header and library
-    # git             is for cloning googletest and google-benchmark
-    apt-get install -y wget g++ make libopenblas-dev git && \
+    # wget             is to download cmake and Intel's compiler
+    # intel-opencl-icd is for Intel LevelZero driver
+    # g++              is for gcc and ld
+    # make             is for cmake's generation
+    # libopenblas-dev  is for BLAS header and library
+    # git              is for cloning googletest and google-benchmark
+    apt-get install -y wget g++ make libopenblas-dev git intel-opencl-icd && \
     # Download Intel BaseKit (without --list-components it installs everything)
     wget --no-verbose https://registrationcenter-download.intel.com/akdlm/IRC_NAS/163da6e4-56eb-4948-aba3-debcec61c064/l_BaseKit_p_${INTEL_BASEKIT_VERSION}_offline.sh -O intel_basekit.sh && \
     echo "Before BaseKit installation" && \
