@@ -1,4 +1,6 @@
-FROM ubuntu:22.04
+ARG CUDA_VERSION=12.3.1
+
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -40,15 +42,6 @@ RUN apt-get update && \
     chmod +x cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     ./cmake-${CMAKE_VERSION}-linux-x86_64.sh --skip-license --prefix=/usr/local && \
     rm -f ./cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
-    # Install NVIDIA CUDA toolkit (installation steps copied from https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=22.04&target_type=deb_local)
-    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin && \
-    mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600 && \
-    wget https://developer.download.nvidia.com/compute/cuda/12.3.2/local_installers/cuda-repo-ubuntu2204-12-3-local_12.3.2-545.23.08-1_amd64.deb && \
-    dpkg -i cuda-repo-ubuntu2204-12-3-local_12.3.2-545.23.08-1_amd64.deb && \
-    cp /var/cuda-repo-ubuntu2204-12-3-local/cuda-*-keyring.gpg /usr/share/keyrings/ && \
-    apt-get update && \
-    apt-get -y install cuda-toolkit-12-3 && \
-    rm -f cuda-repo-ubuntu2204-12-3-local_12.3.2-545.23.08-1_amd64.deb && \
     # Install CodePlay NVIDIA add-on
     curl -LOJ "https://developer.codeplay.com/api/v1/products/download?product=oneapi&variant=nvidia&version=2024.0.2&filters[]=12.0&filters[]=linux" && \
     sh ./oneapi-for-nvidia-gpus-2024.0.2-cuda-12.0-linux.sh && \
