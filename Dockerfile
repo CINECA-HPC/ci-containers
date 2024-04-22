@@ -1,6 +1,4 @@
-ARG CUDA_VERSION=12.3.1
-
-FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu22.04
+FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -14,13 +12,14 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     # Installing what we need:
     # curl             is to download CodePlay NVIDIA add-on (the recommended way)
-    # wget             is to download cmake and Intel's compiler
+    # wget             is to download cmake and Intel OneAPI compiler installers
+    # ca-certificates  is for HTTPS certificates
     # intel-opencl-icd is for Intel LevelZero driver
-    # g++              is for gcc and ld
+    # g++              is for g++ and ld, needed by Intel OneAPI compiler
     # make             is for cmake's generation
     # libopenblas-dev  is for BLAS header and library
     # git              is needed by Cmake for cloning googletest and google-benchmark
-    apt-get install --no-install-recommends -y curl wget g++ make libopenblas-dev git intel-opencl-icd && \
+    apt-get install --no-install-recommends -y curl wget ca-certificates g++ make libopenblas-dev git intel-opencl-icd && \
     # Download and install Intel BaseKit
     wget --no-verbose https://registrationcenter-download.intel.com/akdlm/IRC_NAS/163da6e4-56eb-4948-aba3-debcec61c064/l_BaseKit_p_${INTEL_BASEKIT_VERSION}_offline.sh -O intel_basekit.sh && \
     sh ./intel_basekit.sh -a --action install --components intel.oneapi.lin.dpcpp-cpp-compiler:intel.oneapi.lin.mkl.devel --silent --eula accept && \
@@ -39,10 +38,10 @@ RUN apt-get update && \
     sh ./oneapi-for-nvidia-gpus-2024.0.2-cuda-12.0-linux.sh && \
     rm -f ./oneapi-for-nvidia-gpus-2024.0.2-cuda-12.0-linux.sh && \
     # Remove unneeded stuff
-    apt-get remove curl wget -y && \
+    apt-get remove curl wget ca-certificates -y && \
     apt-get clean autoclean && \
     apt-get autoremove -y && \
-    # apt will not work after this point
+    # apt/apt-get will not work after this point
     rm -rf /var/lib/apt/lists/* && \
     # Setup environment variables automatically on startup
     echo ". /opt/intel/oneapi/setvars.sh" >> ~/.bashrc
