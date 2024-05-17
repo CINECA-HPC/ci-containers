@@ -1,6 +1,6 @@
-ARG CUDA_VERSION=12.3.1
+ARG CUDA_VERSION=12.1.0
 
-FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu22.04
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
