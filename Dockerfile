@@ -5,9 +5,9 @@ FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu22.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Tunables
-ARG INTEL_BASEKIT_VERSION=2024.0.1.46
-ARG INTEL_HPCKIT_VERSION=2024.0.1.38
-ARG CMAKE_VERSION=3.28.2
+ARG INTEL_BASEKIT_VERSION=2024.1.0.596
+ARG INTEL_HPCKIT_VERSION=2024.1.0.560
+ARG CMAKE_VERSION=3.29.3
 
 WORKDIR /root
 RUN apt-get update && \
@@ -36,9 +36,9 @@ RUN apt-get update && \
     ./cmake-${CMAKE_VERSION}-linux-x86_64.sh --skip-license --prefix=/usr/local && \
     rm -f ./cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     # Install CodePlay NVIDIA add-on
-    curl -LOJ "https://developer.codeplay.com/api/v1/products/download?product=oneapi&variant=nvidia&version=2024.0.2&filters[]=12.0&filters[]=linux" && \
-    sh ./oneapi-for-nvidia-gpus-2024.0.2-cuda-12.0-linux.sh && \
-    rm -f ./oneapi-for-nvidia-gpus-2024.0.2-cuda-12.0-linux.sh && \
+    curl -LOJ "https://developer.codeplay.com/api/v1/products/download?product=oneapi&variant=nvidia&version=2024.1.0&filters[]=12.0&filters[]=linux" && \
+    sh ./oneapi-for-nvidia-gpus-2024.1.0-cuda-12.0-linux.sh && \
+    rm -f ./oneapi-for-nvidia-gpus-2024.1.0-cuda-12.0-linux.sh && \
     # Remove unneeded stuff
     apt-get remove curl wget ca-certificates -y && \
     apt-get clean autoclean && \
