@@ -50,4 +50,4 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     # Setup environment variables automatically on startup
     echo ". /opt/intel/oneapi/setvars.sh" >> ~/.bashrc && \
-    ln /usr/bin/clang-format-18 /usr/bin/clang-format
+    ln /usr/bin/clang-format-17 /usr/bin/clang-format
