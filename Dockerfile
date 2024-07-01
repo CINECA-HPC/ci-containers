@@ -21,8 +21,8 @@ RUN apt-get update && \
     # g++              is for g++ and ld, needed by Intel OneAPI compiler
     # make             is for cmake's generation
     # libopenblas-dev  is for BLAS header and library
-    # git              is needed by Cmake for cloning googletest and google-benchmark
-    apt-get install --no-install-recommends -y curl wget ca-certificates g++ make libopenblas-dev git intel-opencl-icd && \
+    # clang-format     is needed to check code formatting
+    apt-get install --no-install-recommends -y curl wget ca-certificates g++ make libopenblas-dev intel-opencl-icd clang-format && \
     # Download and install Intel BaseKit
     wget --no-verbose https://registrationcenter-download.intel.com/akdlm/IRC_NAS/9a98af19-1c68-46ce-9fdd-e249240c7c42/l_BaseKit_p_${INTEL_BASEKIT_VERSION}_offline.sh -O intel_basekit.sh && \
     sh ./intel_basekit.sh -a --action install --components intel.oneapi.lin.dpcpp-cpp-compiler:intel.oneapi.lin.mkl.devel --silent --eula accept && \
