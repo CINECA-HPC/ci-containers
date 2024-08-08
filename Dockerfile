@@ -28,7 +28,7 @@ RUN apt-get update && \
     # make             is for cmake's generation
     # libopenblas-dev  is for BLAS header and library
     # clang-format     is needed to check code formatting
-    apt-get install --no-install-recommends -y curl ca-certificates g++ make libopenblas-dev intel-opencl-icd clang-format-18 && \
+    apt-get install --no-install-recommends -y curl ca-certificates g++-10 make libopenblas-dev intel-opencl-icd clang-format-18 && \
     # Download and install Intel OneAPI standalone compiler
     wget --no-verbose https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6780ac84-6256-4b59-a647-330eb65f32b6/l_dpcpp-cpp-compiler_p_${INTEL_ONEAPI_VERSION}_offline.sh -O intel_dpcpp.sh && \
     sh ./intel_dpcpp.sh -a --action install --components intel.oneapi.lin.dpcpp-cpp-compiler --silent --eula accept && \
