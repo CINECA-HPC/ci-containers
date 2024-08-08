@@ -24,7 +24,7 @@ RUN apt-get update && \
     # curl             is to download CodePlay NVIDIA add-on (the recommended way)
     # ca-certificates  is for HTTPS certificates
     # intel-opencl-icd is for Intel LevelZero driver
-    # g++              is for g++ and ld, needed by Intel OneAPI compiler
+    # g++-10           is for g++ and ld, needed by Intel OneAPI compiler
     # make             is for cmake's generation
     # libopenblas-dev  is for BLAS header and library
     # clang-format     is needed to check code formatting
