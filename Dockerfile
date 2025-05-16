@@ -30,24 +30,28 @@ RUN apt-get update && \
     # clang-format     is needed to check code formatting
     apt-get install --no-install-recommends -y curl ca-certificates g++-10 make libopenblas-dev intel-opencl-icd clang-format-18 && \
     # Download and install Intel OneAPI standalone compiler
-    wget --no-verbose https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6780ac84-6256-4b59-a647-330eb65f32b6/l_dpcpp-cpp-compiler_p_${INTEL_ONEAPI_VERSION}_offline.sh -O intel_dpcpp.sh && \
-    sh ./intel_dpcpp.sh -a --action install --components intel.oneapi.lin.dpcpp-cpp-compiler --silent --eula accept && \
-    rm -f ./intel_dpcpp.sh && \
+    wget --no-verbose -O /tmp/intel_dpcpp.sh https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6780ac84-6256-4b59-a647-330eb65f32b6/l_dpcpp-cpp-compiler_p_${INTEL_ONEAPI_VERSION}_offline.sh && \
+    echo "9463aa979314d2acc51472d414ffcee032e9869ca85ac6ff4c71d39500e5173d /tmp/intel_dpcpp.sh" > /tmp/checksum.txt && \
+    sha256sum --check /tmp/checksum.txt && \
+    sh /tmp/intel_dpcpp.sh -a --action install --components intel.oneapi.lin.dpcpp-cpp-compiler --silent --eula accept && \
     # Install Cmake
-    wget --no-verbose https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
-    chmod +x cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
-    ./cmake-${CMAKE_VERSION}-linux-x86_64.sh --skip-license --prefix=/usr/local && \
-    rm -f ./cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
+    wget -O /tmp/install-cmake -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
+    chmod +x /tmp/install-cmake && \
+    /tmp/install-cmake --skip-license --prefix=/usr/local && \
     # Install CodePlay NVIDIA add-on
-    curl -LOJ "https://developer.codeplay.com/api/v1/products/download?product=oneapi&variant=nvidia&version=2024.2.0&filters[]=12.0&filters[]=linux" && \
-    sh ./oneapi-for-nvidia-gpus-2024.2.0-cuda-12.0-linux.sh && \
-    rm -f ./oneapi-for-nvidia-gpus-2024.2.0-cuda-12.0-linux.sh && \
+    curl -LJ "https://developer.codeplay.com/api/v1/products/download?product=oneapi&variant=nvidia&version=2024.2.0&filters[]=12.0&filters[]=linux" -o /tmp/codeplay.sh && \
+    echo "0622df0054364b01e91e7ed72a33cb3281e281db5b0e86579f516b1cc5336b0f /tmp/codeplay.sh" >> /tmp/codeplay_checksum.txt && \
+    sha256sum --check /tmp/codeplay_checksum.txt && \
+    sh /tmp/codeplay.sh --yes && \
     # Remove unneeded stuff
     apt-get remove curl wget ca-certificates -y && \
     apt-get clean autoclean && \
     apt-get autoremove -y && \
+    rm -rf /tmp/* && \
+    rm -rf /var/intel && \
     # apt/apt-get will not work after this point
     rm -rf /var/lib/apt/lists/* && \
-    # Setup environment variables automatically on startup
-    echo ". /opt/intel/oneapi/setvars.sh" >> ~/.bashrc && \
     ln /usr/bin/clang-format-18 /usr/bin/clang-format
+
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
