@@ -42,7 +42,8 @@ RUN apt-get update && \
     curl -LJ "https://developer.codeplay.com/api/v1/products/download?product=oneapi&variant=nvidia&filters[]=linux" -o /tmp/codeplay.sh && \
     echo "45e1d7c42c1915904daf9f3291b2f01622e897c7b661aebd28d6b293ce14fb9d /tmp/codeplay.sh" >> /tmp/codeplay_checksum.txt && \
     sha256sum --check /tmp/codeplay_checksum.txt && \
-    sh /tmp/codeplay.sh --yes && \
+    chmod +x /tmp/codeplay.sh && \
+    /tmp/codeplay.sh --yes && \
     # Remove unneeded stuff
     apt-get remove curl wget ca-certificates -y && \
     apt-get clean autoclean && \
