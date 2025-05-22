@@ -54,7 +54,7 @@ jobs:
           docker build -t ${REGISTRY}/${IMAGE_NAME} -f Dockerfile .
       
       - name: Log in to the Container registry
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/master' }}
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567
         with:
           registry: ${{ env.REGISTRY }}
@@ -62,7 +62,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Docker image
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/master' }}
         id: push
         run: |
           docker push ${REGISTRY}/${IMAGE_NAME}
