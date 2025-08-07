@@ -26,9 +26,8 @@ RUN apt-get update && \
     # intel-opencl-icd is for Intel LevelZero driver
     # g++-10           is for g++ and ld, needed by Intel OneAPI compiler
     # make             is for cmake's generation
-    # libopenblas-dev  is for BLAS header and library
     # clang-format     is needed to check code formatting
-    apt-get install --no-install-recommends -y curl ca-certificates g++-10 make libopenblas-dev intel-opencl-icd clang-format-18 && \
+    apt-get install --no-install-recommends -y curl ca-certificates g++-10 make intel-opencl-icd clang-format-18 && \
     # Download and install Intel OneAPI standalone compiler
     wget --no-verbose -O /tmp/intel_dpcpp.sh https://registrationcenter-download.intel.com/akdlm/IRC_NAS/c4d2aef3-3123-475e-800c-7d66fd8da2a5/intel-dpcpp-cpp-compiler-${INTEL_ONEAPI_VERSION}_offline.sh && \
     echo "63ea61f54a5ea9d30059ea499697e04953915ef317c0e8fc457077b690c726df /tmp/intel_dpcpp.sh" > /tmp/checksum.txt && \
@@ -39,7 +38,7 @@ RUN apt-get update && \
     chmod +x /tmp/install-cmake && \
     /tmp/install-cmake --skip-license --prefix=/usr/local && \
     # Install CodePlay NVIDIA add-on
-    curl -LJ "https://developer.codeplay.com/api/v1/products/download?product=oneapi&variant=nvidia&filters[]=linux" -o /tmp/codeplay.sh && \
+    curl -LJ "https://developer.codeplay.com/api/v1/products/download?product=oneapi&version=2025.1.1&variant=nvidia&filters[]=linux" -o /tmp/codeplay.sh && \
     echo "45e1d7c42c1915904daf9f3291b2f01622e897c7b661aebd28d6b293ce14fb9d /tmp/codeplay.sh" >> /tmp/codeplay_checksum.txt && \
     sha256sum --check /tmp/codeplay_checksum.txt && \
     chmod +x /tmp/codeplay.sh && \

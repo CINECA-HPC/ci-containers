@@ -26,9 +26,8 @@ RUN apt-get update && \
     # intel-opencl-icd is for Intel LevelZero driver
     # g++-10           is for g++ and ld, needed by Intel OneAPI compiler
     # make             is for cmake's generation
-    # libopenblas-dev  is for BLAS header and library
     # clang-format     is needed to check code formatting
-    apt-get install --no-install-recommends -y curl ca-certificates g++-10 make libopenblas-dev intel-opencl-icd clang-format-18 && \
+    apt-get install --no-install-recommends -y curl ca-certificates g++-10 make intel-opencl-icd clang-format-18 && \
     # Download and install Intel OneAPI standalone compiler
     wget --no-verbose -O /tmp/intel_dpcpp.sh https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6780ac84-6256-4b59-a647-330eb65f32b6/l_dpcpp-cpp-compiler_p_${INTEL_ONEAPI_VERSION}_offline.sh && \
     echo "9463aa979314d2acc51472d414ffcee032e9869ca85ac6ff4c71d39500e5173d /tmp/intel_dpcpp.sh" > /tmp/checksum.txt && \
