@@ -18,10 +18,14 @@ deb-src http://apt.llvm.org/noble/ llvm-toolchain-noble-20 main\n" >> /etc/apt/s
        libclang-rt-20-dev \
        libc++-20-dev \
        libc++abi-20-dev \
-       lld-20 && \
+       lld-20 \
+       clang-format-20 \
+       clang-tidy-20 && \
     ln -s /usr/bin/clang-20 /usr/bin/clang && \
     ln -s /usr/bin/clang++-20 /usr/bin/clang++ && \
     ln -s /usr/bin/lld-20 /usr/bin/lld && \
+    ln -s /usr/bin/clang-format-20 /usr/bin/clang-format && \
+    ln -s /usr/bin/clang-tidy-20 /usr/bin/clang-tidy && \
     # Install Cmake
     wget -O /tmp/install-cmake -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     chmod +x /tmp/install-cmake && \
