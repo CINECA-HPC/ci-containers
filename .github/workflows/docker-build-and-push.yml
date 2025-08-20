@@ -21,6 +21,8 @@ jobs:
     strategy:
       matrix:
         include:
+          - toolchain: clang
+            version: 20.1.8
           - toolchain: oneapi
             version: 2024.2.0
           - toolchain: oneapi
