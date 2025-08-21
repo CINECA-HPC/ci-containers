@@ -15,10 +15,10 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y wget && \
     # add LLVM GPG key to download clang-format 18
     wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
-    echo 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal main' >> /etc/apt/sources.list && \
-    echo 'deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal main' >> /etc/apt/sources.list && \
-    echo 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-18 main' >> /etc/apt/sources.list && \
-    echo 'deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-18 main' >> /etc/apt/sources.list && \
+    echo 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy main' >> /etc/apt/sources.list && \
+    echo 'deb-src http://apt.llvm.org/jammy/ llvm-toolchain-jammy main' >> /etc/apt/sources.list && \
+    echo 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main' >> /etc/apt/sources.list && \
+    echo 'deb-src http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main' >> /etc/apt/sources.list && \
     apt-get update && \
     # Installing what we need:
     # curl             is to download CodePlay NVIDIA add-on (the recommended way)
