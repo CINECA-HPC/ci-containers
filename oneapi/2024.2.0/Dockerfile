@@ -8,26 +8,16 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG INTEL_ONEAPI_VERSION=2024.2.0.495
 ARG CMAKE_VERSION=3.29.6
 
-WORKDIR /root
 RUN apt-get update && \
     apt-get upgrade -y && \
-    # wget is to download cmake and Intel OneAPI compiler installers
-    apt-get install --no-install-recommends -y wget && \
-    # add LLVM GPG key to download clang-format 18
-    wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
-    echo 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal main' >> /etc/apt/sources.list && \
-    echo 'deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal main' >> /etc/apt/sources.list && \
-    echo 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-18 main' >> /etc/apt/sources.list && \
-    echo 'deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-18 main' >> /etc/apt/sources.list && \
-    apt-get update && \
     # Installing what we need:
+    # wget             is to download cmake and Intel OneAPI compiler installers
     # curl             is to download CodePlay NVIDIA add-on (the recommended way)
     # ca-certificates  is for HTTPS certificates
     # intel-opencl-icd is for Intel LevelZero driver
     # g++-10           is for g++ and ld, needed by Intel OneAPI compiler
     # make             is for cmake's generation
-    # clang-format     is needed to check code formatting
-    apt-get install --no-install-recommends -y curl ca-certificates g++-10 make intel-opencl-icd clang-format-18 && \
+    apt-get install --no-install-recommends -y wget curl ca-certificates g++-10 make intel-opencl-icd && \
     # Download and install Intel OneAPI standalone compiler
     wget --no-verbose -O /tmp/intel_dpcpp.sh https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6780ac84-6256-4b59-a647-330eb65f32b6/l_dpcpp-cpp-compiler_p_${INTEL_ONEAPI_VERSION}_offline.sh && \
     echo "9463aa979314d2acc51472d414ffcee032e9869ca85ac6ff4c71d39500e5173d /tmp/intel_dpcpp.sh" > /tmp/checksum.txt && \
@@ -49,8 +39,7 @@ RUN apt-get update && \
     rm -rf /tmp/* && \
     rm -rf /var/intel && \
     # apt/apt-get will not work after this point
-    rm -rf /var/lib/apt/lists/* && \
-    ln /usr/bin/clang-format-18 /usr/bin/clang-format
+    rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
