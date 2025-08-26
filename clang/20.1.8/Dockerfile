@@ -1,6 +1,5 @@
-FROM ubuntu:24.04
-
-ARG DEBIAN_FRONTEND=noninteractive
+ARG UBUNTU_VERSION=24.04
+FROM ubuntu:${UBUNTU_VERSION} AS builder
 
 # Tunables
 ARG CMAKE_VERSION=3.29.6
@@ -29,9 +28,11 @@ deb-src http://apt.llvm.org/noble/ llvm-toolchain-noble-20 main\n" >> /etc/apt/s
     # Install Cmake
     wget -O /tmp/install-cmake -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     chmod +x /tmp/install-cmake && \
-    /tmp/install-cmake --skip-license --prefix=/usr/local && \
-    # Cleanup
-    apt remove -y wget ca-certificates gnupg2 && \
-    apt autoremove -y && \
-    apt clean autoclean -y && \
-    rm -rf /tmp/* /var/lib/apt/lists/*
+    /tmp/install-cmake --skip-license --prefix=/usr/local
+
+FROM ubuntu:${UBUNTU_VERSION}
+COPY --from=builder /usr/bin /usr/bin
+COPY --from=builder /usr/lib/llvm-20 /usr/lib/llvm-20
+COPY --from=builder /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu
+COPY --from=builder /usr/local/bin /usr/local/bin
+COPY --from=builder /usr/local/share /usr/local/share
