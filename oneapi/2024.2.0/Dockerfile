@@ -1,23 +1,18 @@
+ARG UBUNTU_VERSION=20.04
 ARG CUDA_VERSION=11.4.3
-
-FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04
-
-ARG DEBIAN_FRONTEND=noninteractive
+FROM ubuntu:${UBUNTU_VERSION} AS builder
 
 # Tunables
 ARG INTEL_ONEAPI_VERSION=2024.2.0.495
 ARG CMAKE_VERSION=3.29.6
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
+RUN apt update && \
+    apt upgrade -y && \
     # Installing what we need:
     # wget             is to download cmake and Intel OneAPI compiler installers
     # curl             is to download CodePlay NVIDIA add-on (the recommended way)
     # ca-certificates  is for HTTPS certificates
-    # intel-opencl-icd is for Intel LevelZero driver
-    # g++-10           is for g++ and ld, needed by Intel OneAPI compiler
-    # make             is for cmake's generation
-    apt-get install --no-install-recommends -y wget curl ca-certificates g++-10 make intel-opencl-icd && \
+    apt install --no-install-recommends -y wget curl ca-certificates && \
     # Download and install Intel OneAPI standalone compiler
     wget --no-verbose -O /tmp/intel_dpcpp.sh https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6780ac84-6256-4b59-a647-330eb65f32b6/l_dpcpp-cpp-compiler_p_${INTEL_ONEAPI_VERSION}_offline.sh && \
     echo "9463aa979314d2acc51472d414ffcee032e9869ca85ac6ff4c71d39500e5173d /tmp/intel_dpcpp.sh" > /tmp/checksum.txt && \
@@ -31,15 +26,12 @@ RUN apt-get update && \
     curl -LJ "https://developer.codeplay.com/api/v1/products/download?product=oneapi&variant=nvidia&version=2024.2.0&filters[]=12.0&filters[]=linux" -o /tmp/codeplay.sh && \
     echo "0622df0054364b01e91e7ed72a33cb3281e281db5b0e86579f516b1cc5336b0f /tmp/codeplay.sh" >> /tmp/codeplay_checksum.txt && \
     sha256sum --check /tmp/codeplay_checksum.txt && \
-    sh /tmp/codeplay.sh --yes && \
-    # Remove unneeded stuff
-    apt-get remove curl wget ca-certificates -y && \
-    apt-get clean autoclean && \
-    apt-get autoremove -y && \
-    rm -rf /tmp/* && \
-    rm -rf /var/intel && \
-    # apt/apt-get will not work after this point
-    rm -rf /var/lib/apt/lists/*
+    sh /tmp/codeplay.sh --yes
+    
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
+COPY --from=builder /opt/intel /opt/intel
+COPY --from=builder /usr/local/bin /usr/local/bin
+COPY --from=builder /usr/local/share /usr/local/share
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
