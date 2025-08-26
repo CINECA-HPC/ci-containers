@@ -34,5 +34,7 @@ FROM ubuntu:${UBUNTU_VERSION}
 COPY --from=builder /usr/bin /usr/bin
 COPY --from=builder /usr/lib/llvm-20 /usr/lib/llvm-20
 COPY --from=builder /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu
+COPY --from=builder /usr/lib/gcc /usr/lib/gcc
+COPY --from=builder /usr/include /usr/include
 COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /usr/local/share /usr/local/share
