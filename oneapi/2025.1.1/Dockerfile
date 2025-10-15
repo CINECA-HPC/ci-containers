@@ -23,7 +23,7 @@ RUN apt update && \
     chmod +x /tmp/install-cmake && \
     /tmp/install-cmake --skip-license --prefix=/usr/local && \
     # Install CodePlay NVIDIA add-on
-    curl -LJ "https://developer.codeplay.com/api/v1/products/download?product=oneapi&version=2025.1.1&variant=nvidia&filters[]=linux" -o /tmp/codeplay.sh && \
+    curl --fail-with-body -LJ "https://developer.codeplay.com/api/v1/products/download?product=oneapi&version=2025.1.1&variant=nvidia&filters[]=linux" -o /tmp/codeplay.sh && \
     echo "45e1d7c42c1915904daf9f3291b2f01622e897c7b661aebd28d6b293ce14fb9d /tmp/codeplay.sh" >> /tmp/codeplay_checksum.txt && \
     sha256sum --check /tmp/codeplay_checksum.txt && \
     chmod +x /tmp/codeplay.sh && \
