@@ -24,7 +24,7 @@ RUN apt update && \
     /tmp/install-cmake --skip-license --prefix=/usr/local && \
     # Install CodePlay NVIDIA add-on
     curl --fail-with-body -LJ "https://gitlab.hpc.cineca.it/aguarnie/mirror-codeplay/-/raw/master/oneapi-for-nvidia-gpus-2025.1.1-rocm-all-linux.sh?ref_type=heads&inline=false" -o /tmp/codeplay.sh && \
-    echo "84c0225131da6d066144a56ab3bd6213314a894ef4346d400140185b2f97bdc7 /tmp/codeplay.sh" >> /tmp/codeplay_checksum.txt && \
+    echo "45e1d7c42c1915904daf9f3291b2f01622e897c7b661aebd28d6b293ce14fb9d /tmp/codeplay.sh" >> /tmp/codeplay_checksum.txt && \
     sha256sum --check /tmp/codeplay_checksum.txt && \
     chmod +x /tmp/codeplay.sh && \
     /tmp/codeplay.sh --yes
