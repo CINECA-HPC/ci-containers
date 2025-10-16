@@ -29,6 +29,8 @@ jobs:
             version: 2025.1.1
           # - toolchain: oneapi
           #   version: 2025.2.0
+          - toolchain: cuda
+            version: 12.3.2
 
     env:
       REGISTRY: docker.io
