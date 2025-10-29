@@ -21,6 +21,8 @@ jobs:
     strategy:
       matrix:
         include:
+          - toolchain: acpp
+            version: 25.02.0
           - toolchain: clang
             version: 20.1.8
           - toolchain: oneapi
