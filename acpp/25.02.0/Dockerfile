@@ -29,9 +29,8 @@ RUN apt-get update -y && \
     cd /AdaptiveCpp && \
     mkdir build && cd build && \
     cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local && \
-    make -j "$(nproc)" && \
+    make -j$(nproc) && \
     make install
 
-# Set environment variables (if needed)
-ENV PATH="/usr/local/bin:${PATH}" \
-    LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT [ "/entrypoint.sh" ]
