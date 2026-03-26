@@ -1,5 +1,4 @@
 ARG UBUNTU_VERSION=22.04
-ARG CUDA_VERSION=12.3.2
 FROM ubuntu:${UBUNTU_VERSION} AS builder
 
 # Tunables
@@ -22,16 +21,22 @@ RUN apt update && \
     wget -O /tmp/install-cmake -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     chmod +x /tmp/install-cmake && \
     /tmp/install-cmake --skip-license --prefix=/usr/local && \
+    # Install CUDA
+    wget -O /tmp/cuda-keyring.deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb && \
+    dpkg -i /tmp/cuda-keyring.deb && \
+    apt update && \
+    apt install -y --no-install-recommends cuda-minimal-build-12-3 && \
     # University of Salerno NVIDIA Plugin
     curl --fail-with-body -L "https://github.com/unisa-hpc/oneapi-plugins/releases/download/v2025.3/oneapi-ur-cuda-linux-x86_64-2025.3.sh" -o /tmp/oneapi-ur-cuda-linux-x86_64-2025.3.sh && \
     echo "8cbf18ab93bb1f2b2145aa591814778f1434e46603641f9b13f6fc70f2f531dc  /tmp/oneapi-ur-cuda-linux-x86_64-2025.3.sh" | sha256sum -c - && \
     chmod +x /tmp/oneapi-ur-cuda-linux-x86_64-2025.3.sh && \
     /tmp/oneapi-ur-cuda-linux-x86_64-2025.3.sh --oneapi-root /opt/intel/oneapi
 
-FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
+FROM ubuntu:${UBUNTU_VERSION}
 COPY --from=builder /opt/intel /opt/intel
 COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /usr/local/share /usr/local/share
+COPY --from=builder /usr/local/cuda-12.3 /usr/local/cuda-12.3
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

@@ -1,5 +1,4 @@
-ARG UBUNTU_VERSION=20.04
-ARG CUDA_VERSION=11.4.3
+ARG UBUNTU_VERSION=22.04
 FROM ubuntu:${UBUNTU_VERSION} AS builder
 
 # Tunables
@@ -22,16 +21,22 @@ RUN apt update && \
     wget -O /tmp/install-cmake -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh && \
     chmod +x /tmp/install-cmake && \
     /tmp/install-cmake --skip-license --prefix=/usr/local && \
+    # Install CUDA
+    wget -O /tmp/cuda-keyring.deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb && \
+    dpkg -i /tmp/cuda-keyring.deb && \
+    apt update && \
+    apt install -y --no-install-recommends cuda-minimal-build-11-8 && \
     # Install CodePlay NVIDIA add-on
     curl --fail -LJ "https://gitlab.hpc.cineca.it/aguarnie/mirror-codeplay/-/raw/master/oneapi-for-nvidia-gpus-2024.2.0-cuda-12.0-linux.sh?ref_type=heads&inline=false" -o /tmp/codeplay.sh && \
     echo "0622df0054364b01e91e7ed72a33cb3281e281db5b0e86579f516b1cc5336b0f /tmp/codeplay.sh" >> /tmp/codeplay_checksum.txt && \
     sha256sum --check /tmp/codeplay_checksum.txt && \
     sh /tmp/codeplay.sh --yes
     
-FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
+FROM ubuntu:${UBUNTU_VERSION}
 COPY --from=builder /opt/intel /opt/intel
 COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /usr/local/share /usr/local/share
+COPY --from=builder /usr/local/cuda-11.8 /usr/local/cuda-11.8
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
