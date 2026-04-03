@@ -23,11 +23,10 @@ RUN apt update && \
     chmod +x /tmp/install-cmake && \
     /tmp/install-cmake --skip-license --prefix=/usr/local && \
     # Install CodePlay NVIDIA add-on
-    curl --fail-with-body -LJ "https://gitlab.hpc.cineca.it/aguarnie/mirror-codeplay/-/raw/master/oneapi-for-nvidia-gpus-2025.1.1-rocm-all-linux.sh?ref_type=heads&inline=false" -o /tmp/codeplay.sh && \
-    echo "45e1d7c42c1915904daf9f3291b2f01622e897c7b661aebd28d6b293ce14fb9d /tmp/codeplay.sh" >> /tmp/codeplay_checksum.txt && \
-    sha256sum --check /tmp/codeplay_checksum.txt && \
-    chmod +x /tmp/codeplay.sh && \
-    /tmp/codeplay.sh --yes
+    curl --fail-with-body -L "https://github.com/fbarbari/oneapi-plugins/releases/download/release-14/oneapi-ur-cuda-linux-x86_64-2025.2.sh" -o /tmp/oneapi-ur-cuda-linux-x86_64-2025.2.sh && \
+    echo "01c23cfbb0ebfdc507b6b41a41b8dd00dca298cb29c4de38e7e60c8b378a008c  /tmp/oneapi-ur-cuda-linux-x86_64-2025.2.sh" | sha256sum -c - && \
+    chmod +x /tmp/oneapi-ur-cuda-linux-x86_64-2025.2.sh && \
+    /tmp/oneapi-ur-cuda-linux-x86_64-2025.2.sh --oneapi-root /opt/intel/oneapi
 
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
 COPY --from=builder /opt/intel /opt/intel
