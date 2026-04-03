@@ -23,8 +23,8 @@ RUN apt update && \
     chmod +x /tmp/install-cmake && \
     /tmp/install-cmake --skip-license --prefix=/usr/local && \
     # Install CodePlay NVIDIA add-on
-    curl --fail-with-body -L "https://github.com/fbarbari/oneapi-plugins/releases/download/release-13/oneapi-ur-cuda-linux-x86_64-2025.2.sh" -o /tmp/oneapi-ur-cuda-linux-x86_64-2025.2.sh && \
-    echo "e347ba44555241943486b24b086df6ccc9cade093fae30e5c3e8964b7cc787a5  /tmp/oneapi-ur-cuda-linux-x86_64-2025.2.sh" | sha256sum -c - && \
+    curl --fail-with-body -L "https://github.com/fbarbari/oneapi-plugins/releases/download/release-14/oneapi-ur-cuda-linux-x86_64-2025.2.sh" -o /tmp/oneapi-ur-cuda-linux-x86_64-2025.2.sh && \
+    echo "01c23cfbb0ebfdc507b6b41a41b8dd00dca298cb29c4de38e7e60c8b378a008c  /tmp/oneapi-ur-cuda-linux-x86_64-2025.2.sh" | sha256sum -c - && \
     chmod +x /tmp/oneapi-ur-cuda-linux-x86_64-2025.2.sh && \
     /tmp/oneapi-ur-cuda-linux-x86_64-2025.2.sh --oneapi-root /opt/intel/oneapi
 
