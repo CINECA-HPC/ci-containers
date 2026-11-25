@@ -1,6 +1,7 @@
 ARG UBUNTU_VERSION=22.04
 ARG CUDA_VERSION=12.3.2
 FROM ubuntu:${UBUNTU_VERSION} AS builder
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Tunables
 ARG INTEL_ONEAPI_VERSION=2025.3.2.26
@@ -29,6 +30,7 @@ RUN apt update && \
     /tmp/oneapi-ur-cuda-linux-x86_64-2025.3.sh --oneapi-root /opt/intel/oneapi
 
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
+ENV DEBIAN_FRONTEND=noninteractive
 COPY --from=builder /opt/intel /opt/intel
 COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /usr/local/share /usr/local/share

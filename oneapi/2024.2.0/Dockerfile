@@ -1,6 +1,7 @@
 ARG UBUNTU_VERSION=20.04
 ARG CUDA_VERSION=11.4.3
 FROM ubuntu:${UBUNTU_VERSION} AS builder
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Tunables
 ARG INTEL_ONEAPI_VERSION=2024.2.0.495
@@ -29,6 +30,7 @@ RUN apt update && \
     sh /tmp/codeplay.sh --yes
     
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
+ENV DEBIAN_FRONTEND=noninteractive
 COPY --from=builder /opt/intel /opt/intel
 COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /usr/local/share /usr/local/share
