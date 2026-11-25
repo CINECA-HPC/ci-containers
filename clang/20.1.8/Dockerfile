@@ -1,5 +1,6 @@
 ARG UBUNTU_VERSION=24.04
 FROM ubuntu:${UBUNTU_VERSION} AS builder
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Tunables
 ARG CMAKE_VERSION=3.29.6
@@ -31,6 +32,7 @@ deb-src http://apt.llvm.org/noble/ llvm-toolchain-noble-20 main\n" >> /etc/apt/s
     /tmp/install-cmake --skip-license --prefix=/usr/local
 
 FROM ubuntu:${UBUNTU_VERSION}
+ENV DEBIAN_FRONTEND=noninteractive
 COPY --from=builder /usr/bin /usr/bin
 COPY --from=builder /usr/lib/llvm-20 /usr/lib/llvm-20
 COPY --from=builder /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu

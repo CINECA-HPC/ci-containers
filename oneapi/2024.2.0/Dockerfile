@@ -1,6 +1,7 @@
 ARG UBUNTU_VERSION=20.04
 ARG CUDA_VERSION=11.4.3
 FROM ubuntu:${UBUNTU_VERSION} AS builder
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Tunables
 ARG INTEL_ONEAPI_VERSION=2024.2.0.495
@@ -29,9 +30,22 @@ RUN apt update && \
     sh /tmp/codeplay.sh --yes
     
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION}
+ENV DEBIAN_FRONTEND=noninteractive
 COPY --from=builder /opt/intel /opt/intel
 COPY --from=builder /usr/local/bin /usr/local/bin
 COPY --from=builder /usr/local/share /usr/local/share
+
+# clang-format-20 and clang-tidy-20 from the LLVM apt repository
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y wget gnupg ca-certificates && \
+    . /etc/os-release && \
+    wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/llvm.gpg] https://apt.llvm.org/${VERSION_CODENAME}/ llvm-toolchain-${VERSION_CODENAME}-20 main" > /etc/apt/sources.list.d/llvm.list && \
+    apt-get update && \
+    apt-get install --no-install-recommends -y clang-format-20 clang-tidy-20 && \
+    ln -s /usr/bin/clang-format-20 /usr/bin/clang-format && \
+    ln -s /usr/bin/clang-tidy-20 /usr/bin/clang-tidy && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
