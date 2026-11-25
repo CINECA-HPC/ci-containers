@@ -71,7 +71,7 @@ jobs:
       - name: Build Docker image
         run: |
           cd ${GITHUB_WORKSPACE}/${{ matrix.toolchain }}/${{ matrix.version }}
-          docker build -t ${REGISTRY}/${IMAGE_NAME} -f Dockerfile .
+          docker build -t ${REGISTRY}/${IMAGE_NAME}-${GITHUB_SHA} -f Dockerfile .
       
       - name: Log in to the Container registry
         if: ${{ github.ref == 'refs/heads/master' }}
@@ -85,4 +85,4 @@ jobs:
         if: ${{ github.ref == 'refs/heads/master' }}
         id: push
         run: |
-          docker push ${REGISTRY}/${IMAGE_NAME}
+          docker push ${REGISTRY}/${IMAGE_NAME}-${GITHUB_SHA}
